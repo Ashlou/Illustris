@@ -19,22 +19,70 @@ def write2fits(filename, arry):
     thdulist.writeto(filename)
     print "Done ... written on .. %s"%(filename)
 
-def test():
-    a = np.array([123., 234., 345.])
-    b = np.array([1, 0, 1])
-    data = np.array(zip(a,b), dtype=np.dtype([('real','f4'), ('int','i4')]))
-    write2fits('test.fits', data)
-  
 
 try:
     basepath = sys.argv[1]
-    snapshot = int(sys.argvp[2])
+    snapshot = int(sys.argv[2])
     assert (snapshot >= 0 and snapshot <= 135), 'Snapshot between 0-135'
 except:
-    basepath = './Illustris-3/'
+    basepath = '/home/ahmad/Illustris-3'
     snapshot = int('135')
 
 subhalos = il.groupcat.loadSubhalos(basepath, snapshot)
-allfields = subhalos.key()
+allfields = subhalos.keys()
 
-#append_fields(objgal, ['TYCHOVETO'], data=[tychomask], dtypes=tychomask.dtype, usemask=False)
+''' AVAILABLE COLUMNS
+SubhaloPos
+SubhaloBHMdot
+SubhaloVmax
+SubhaloWindMass
+SubhaloGasMetallicityMaxRad
+SubhaloVelDisp
+SubhaloSFR
+SubhaloStarMetallicityMaxRad
+SubhaloLen
+SubhaloSFRinHalfRad
+SubhaloStellarPhotometrics
+SubhaloGasMetallicity
+SubhaloBHMass
+SubhaloIDMostbound
+SubhaloMassType
+SubhaloStellarPhotometricsMassInRad
+SubhaloHalfmassRad
+SubhaloParent
+SubhaloSpin
+SubhaloStarMetallicityHalfRad
+SubhaloVel
+SubhaloLenType
+SubhaloGasMetallicitySfrWeighted
+SubhaloGasMetallicityHalfRad
+SubhaloMassInRad
+SubhaloGrNr
+SubhaloMassInHalfRad
+SubhaloSFRinRad
+SubhaloMassInMaxRad
+SubhaloHalfmassRadType
+SubhaloMassInMaxRadType
+SubhaloCM
+SubhaloStarMetallicity
+count
+SubhaloMassInHalfRadType
+SubhaloMass
+SubhaloMassInRadType
+SubhaloVmaxRad
+SubhaloSFRinMaxRad
+SubhaloStellarPhotometricsRad
+SubhaloGasMetallicitySfr
+
+'''
+# For desired columns, edit `ts`
+ts = [
+      'SubhaloPos',
+      'SubhaloSFR',
+      'SubhaloMass'
+      ]
+
+for tsi in ts:
+   ar = subhalos[tsi]
+   np.savetxt(tsi+'-data.txt', ar, header=''+tsi)
+print 'done!'
